@@ -19,6 +19,7 @@
             cargo
             rustc
             dotenv-cli
+            sqlite
           ];
 
           # Optional: Define any shell hooks or additional environment variables

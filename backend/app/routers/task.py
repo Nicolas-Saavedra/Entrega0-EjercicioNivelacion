@@ -9,6 +9,7 @@ from app.models.user import User
 
 router = APIRouter()
 
+"""
 @router.post("/", response_model=TaskCreateResponse, status_code=status.HTTP_201_CREATED)
 def create_task_endpoint(task: TaskCreate, db: Session = Depends(get_db)):
     # Check if user already exists
@@ -16,3 +17,4 @@ def create_task_endpoint(task: TaskCreate, db: Session = Depends(get_db)):
     if user is None:
         raise HTTPException(HTTP_401_UNAUTHORIZED, detail="You are not authorized to perform this action")
     return create_user(db, user)
+"""
