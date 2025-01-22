@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.user import UserCreate, UserLogin
-from app.dependencies import get_hashed_password, verify_password
-from hashlib import md5, sha256
+from app.schemas.user import UserCreate 
+from app.utils import get_hashed_password 
+from hashlib import md5 
 
 def create_user(db: Session, user: UserCreate) -> User:
     hashed_password = get_hashed_password(user.contrasenia)  # Example password hashing
@@ -16,15 +16,3 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.commit()
     db.refresh(db_user)
     return db_user
-
-def login_user(db: Session, user: UserLogin) -> str | None:
-    hashed_password = sha256(user.contrasenia.encode()).hexdigest()  # Example password hashing
-    db_user = db.query(User).filter_by(nombre_usuario=user.nombre_usuario).first()
-
-    if db_user and db_user.contrasenia == hashed_password:
-        return create_token(db_user.nombre_usuario)
-    else:
-        return None
-
-def logout_user(token: str) -> bool:
-    return bool(delete_token(token))
