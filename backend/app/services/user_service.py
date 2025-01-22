@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserLogin
-from app.dependencies import create_token, delete_token
+from app.dependencies import get_hashed_password, verify_password
 from hashlib import md5, sha256
 
 def create_user(db: Session, user: UserCreate) -> User:
-    hashed_password = sha256(user.contrasenia.encode()).hexdigest()  # Example password hashing
+    hashed_password = get_hashed_password(user.contrasenia)  # Example password hashing
     hashed_username = md5(user.nombre_usuario.encode()).hexdigest()
     db_user = User(
         nombre_usuario=user.nombre_usuario,

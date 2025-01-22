@@ -18,11 +18,12 @@
             python312Packages.pip # pip
             cargo
             rustc
+            dotenv-cli
           ];
 
           # Optional: Define any shell hooks or additional environment variables
           shellHook = ''
-            exec fish
+            source .venv/bin/activate
           '';
         };
     };

@@ -7,6 +7,10 @@ class UserCreate(BaseModel):
 class UserLogin(UserCreate):
     pass
 
+class TokenSchema(BaseModel):
+    access_token: str
+    refresh_token: str
+
 class UserResponse(BaseModel):
     id: int
     nombre_usuario: str
