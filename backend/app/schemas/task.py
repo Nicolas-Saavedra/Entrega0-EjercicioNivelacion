@@ -9,8 +9,11 @@ class TaskCreate(BaseModel):
     id_Usuario: int
     id_Categoria: int
 
+class TaskUpdate(BaseModel):
+    texto_tarea: str | None
+    estado: str | None
 
-class TaskCreateResponse(BaseModel):
+class TaskSchema(BaseModel):
     id: int
     texto_tarea: str
     fecha_creacion: datetime
@@ -19,15 +22,5 @@ class TaskCreateResponse(BaseModel):
     id_Usuario: int
     id_Categoria: int
 
-    """
-class Task(Base):
-    __tablename__ = "tasks"
-
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    texto_tarea: Mapped[str] = mapped_column(String, index=True)
-    fecha_creacion: Mapped[datetime] = mapped_column(DateTime, index=True)
-    fecha_tentativa_finalizacion: Mapped[datetime] = mapped_column(DateTime, index=True)
-    estado: Mapped[str] = mapped_column(String, index=True)
-    id_Usuario: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
-    id_Categoria: Mapped[int] = mapped_column(Integer, ForeignKey("categories.id"))
-        """
+    class Config:
+        orm_mode = True  # To work seamlessly with SQLAlchemy models

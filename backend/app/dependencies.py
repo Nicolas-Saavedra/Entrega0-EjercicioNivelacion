@@ -13,7 +13,7 @@ from app.utils import (
 )
 
 reuseable_oauth = OAuth2PasswordBearer(
-    tokenUrl="/iniciar-sesion",
+    tokenUrl="/usuarios/iniciar-sesion",
     scheme_name="JWT"
 )
 
@@ -25,7 +25,7 @@ async def get_current_user(token: str = Depends(reuseable_oauth), db: Session = 
         )
         token_data = TokenPayload(**payload)
 
-        if token_data.exp < datetime.now():
+        if datetime.timestamp(token_data.exp) < datetime.timestamp(datetime.now()):
             raise HTTPException(
                 status_code = status.HTTP_401_UNAUTHORIZED,
                 detail="Token expired",
@@ -46,4 +46,4 @@ async def get_current_user(token: str = Depends(reuseable_oauth), db: Session = 
             detail="Could not find user",
         )
 
-    return UserSchema(**user)
+    return user
