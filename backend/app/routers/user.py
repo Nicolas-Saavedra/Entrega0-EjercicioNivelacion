@@ -1,19 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from app.schemas.user import TokenSchema, UserCreate, UserResponse
-from app.services.user_service import create_user, logout_user
+from app.schemas.user import TokenSchema, UserCreate, UserSchema
+from app.services.user_service import create_user
 from app.database import get_db
 from app.models.user import User
-from app.dependencies import (
+from app.utils import (
     create_access_token,
     create_refresh_token,
     verify_password
 )
+from app.dependencies import get_current_user
 
 router = APIRouter()
 
-@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=UserSchema, status_code=status.HTTP_201_CREATED)
 def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):
     # Check if user already exists
     if db.query(User).filter_by(nombre_usuario=user.nombre_usuario).first():
@@ -24,6 +25,10 @@ def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):
 
     # Create user
     return create_user(db, user)
+
+@router.get('/me', summary='Get details of currently logged in user', response_model=UserSchema)
+async def get_me(user: User = Depends(get_current_user)):
+    return user
 
 @router.post("/iniciar-sesion", response_model=TokenSchema, status_code=status.HTTP_201_CREATED)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -42,6 +47,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         )
 
     return {
-        "access_token": create_access_token(user.nombre_usuario),
-        "refresh_token": create_refresh_token(user.nombre_usuario),
+        "access_token": create_access_token(user.id),
+        "refresh_token": create_refresh_token(user.id),
     }

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 class UserCreate(BaseModel):
@@ -11,7 +12,11 @@ class TokenSchema(BaseModel):
     access_token: str
     refresh_token: str
 
-class UserResponse(BaseModel):
+class TokenPayload(BaseModel):
+    exp: datetime
+    sub: str
+
+class UserSchema(BaseModel):
     id: int
     nombre_usuario: str
     imagen_perfil: str
