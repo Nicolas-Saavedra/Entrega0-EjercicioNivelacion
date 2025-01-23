@@ -3,6 +3,12 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
+
+	type SubmitProps = {
+		onsubmit: (name: string, password: string) => void;
+	};
+
+	let { onsubmit }: SubmitProps = $props();
 </script>
 
 <Card.Root class="w-full max-w-sm">
