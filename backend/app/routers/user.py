@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -6,6 +7,7 @@ from app.services.user_service import create_user
 from app.database import get_db
 from app.models.user import User
 from app.models.task import Task
+from app.schemas.task import TaskSchema
 from app.utils import (
     create_access_token,
     create_refresh_token,
@@ -48,7 +50,7 @@ def login_endpoint(form_data: OAuth2PasswordRequestForm = Depends(), db: Session
         "refresh_token": create_refresh_token(user.id),
     }
 
-@router.get("/{id}/tareas", response_model=UserTasksResponse, status_code=status.HTTP_200_OK)
+@router.get("/{id}/tareas", response_model=List[TaskSchema], status_code=status.HTTP_200_OK)
 def get_user_tasks_endpoint(id: str, db: Session = Depends(get_db)):
     user = db.query(User).filter_by(id=id).first()
     if user is None:
@@ -57,6 +59,4 @@ def get_user_tasks_endpoint(id: str, db: Session = Depends(get_db)):
             detail="User does not exist"
         )
     tasks = db.query(Task).filter_by(id_Usuario=user.id).all()
-    return {
-        "tasks": tasks
-    }
+    return tasks
