@@ -8,29 +8,16 @@
 
 	type TaskViewProps = {
 		tasks: Task[];
-		onCreateTask: () => void;
-		onViewCategories: () => void;
-		onEditTask: (task: Task) => void;
 	};
 
-	const { tasks, onCreateTask, onViewCategories, onEditTask }: TaskViewProps = $props();
+	const { tasks } = $props();
 </script>
 
 <Card.Root class="xl:col-span-2">
 	<Card.Header class="flex flex-row items-center">
 		<div class="grid gap-2">
-			<Card.Title>Tareas</Card.Title>
-			<Card.Description>En orden de mas reciente a mas antigua</Card.Description>
-		</div>
-		<div class="ml-auto gap-1">
-			<Button onclick={onCreateTask} size="sm" class="ml-auto gap-1">
-				Crear nueva tarea
-				<FilePlus class="h-4 w-4" />
-			</Button>
-			<Button onclick={onViewCategories} size="sm" class="ml-auto gap-1">
-				Ver categorias
-				<Bookmark class="h-4 w-4" />
-			</Button>
+			<Card.Title>Crear nueva tarea</Card.Title>
+			<Card.Description>Contigo, juntos podemos cumplir cualquier meta</Card.Description>
 		</div>
 	</Card.Header>
 	<Card.Content>

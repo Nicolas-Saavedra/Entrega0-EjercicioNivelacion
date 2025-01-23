@@ -5,13 +5,26 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { type Task } from '../types/task';
-	import { BookCheck } from 'lucide-svelte';
+	import { BookCheck, LogOut } from 'lucide-svelte';
 	import TaskView from '$lib/components/app/taskview.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import { currentAuthTokens } from '../stores/auth';
+	import { goto } from '$app/navigation';
+
 	let tasksPromise = $state(
 		api
 			.get<Task[]>(`${PUBLIC_API_URL}/usuarios/${$currentUser!.id}/tareas`)
 			.then((response) => response.data)
 	);
+
+	function onCreateTask() {}
+	function onViewCategories() {}
+	function onEditTask(task: Task) {}
+	function closeSession() {
+		currentUser.set(null);
+		currentAuthTokens.set(null);
+		goto('/login');
+	}
 </script>
 
 {#await tasksPromise then tasks}
@@ -25,6 +38,9 @@
 								<Avatar.Image src={$currentUser!.imagen_perfil} />
 							</Avatar.Root>
 							Hola de nuevo, {$currentUser!.nombre_usuario}!
+							<div class="ml-auto gap-1">
+								<Button onclick={closeSession}>Cerrar sesión <LogOut class="ml-2 size-4" /></Button>
+							</div>
 						</div>
 					</Card.Title>
 				</Card.Header>
@@ -41,7 +57,7 @@
 					</div>
 				</Card.Content>
 			</Card.Root>
-			<TaskView {tasks} />
+			<TaskView {tasks} {onCreateTask} {onViewCategories} {onEditTask} />
 		</div>
 	</div>
 {/await}
