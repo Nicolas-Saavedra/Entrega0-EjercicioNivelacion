@@ -1,7 +1,8 @@
+from typing import List
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.category import CategoriesResponse, CategoryCreate, CategorySchema, CategoryUpdate
+from app.schemas.category import CategoryCreate, CategorySchema, CategoryUpdate
 from app.models.category import Category
 from app.database import get_db
 from app.dependencies import get_current_user
@@ -10,11 +11,9 @@ from app.services.category_service import create_category, delete_category, upda
 router = APIRouter()
 
 
-@router.get("/", response_model=CategoriesResponse, status_code=status.HTTP_200_OK)
+@router.get("/", response_model=List[CategorySchema], status_code=status.HTTP_200_OK)
 def get_all_categories_endpoint(_: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return {
-        "categories": db.query(Category).all()
-    }
+    return db.query(Category).all()
 
 @router.post("/", response_model=CategorySchema, status_code=status.HTTP_201_CREATED)
 def create_category_endpoint(category_create: CategoryCreate, _: User = Depends(get_current_user), db: Session = Depends(get_db)):
