@@ -13,6 +13,12 @@
 		onEditTask: (task: Task) => void;
 	};
 
+	function toFormattedDate(rawDate: string) {
+		const date = new Date(rawDate);
+		return `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear().toString().substring(2)}
+            ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+	}
+
 	const { tasks, onCreateTask, onViewCategories, onEditTask }: TaskViewProps = $props();
 </script>
 
@@ -46,26 +52,32 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				<Table.Row>
-					<Table.Cell>
-						<div class="max-w-64 font-medium">
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Beatae, ipsam.
-						</div>
-					</Table.Cell>
-					<Table.Cell class="xl:table.-column">
-						<Badge class="text-xs" variant="outline">Approved</Badge>
-					</Table.Cell>
-					<Table.Cell class="md:table.-cell xl:table.-column">2023-06-23</Table.Cell>
-					<Table.Cell class="md:table.-cell xl:table.-column">2023-06-23</Table.Cell>
-					<Table.Cell class="xl:table.-column">
-						<Badge class="text-xs" variant="outline">Approved</Badge>
-					</Table.Cell>
-					<Table.Cell class="md:table.-cell xl:table.-column"
-						><Button class="size-9 p-2">
-							<Pen class="size-3" />
-						</Button></Table.Cell
-					>
-				</Table.Row>
+				{#each tasks as task}
+					<Table.Row>
+						<Table.Cell>
+							<div class="max-w-64 font-medium">
+								{task.texto_tarea}
+							</div>
+						</Table.Cell>
+						<Table.Cell class="xl:table.-column">
+							<Badge class="text-xs" variant="outline">{task.id_Categoria}</Badge>
+						</Table.Cell>
+						<Table.Cell class="md:table.-cell xl:table.-column"
+							>{toFormattedDate(task.fecha_creacion)}</Table.Cell
+						>
+						<Table.Cell class="md:table.-cell xl:table.-column">
+							{toFormattedDate(task.fecha_tentativa_finalizacion)}
+						</Table.Cell>
+						<Table.Cell class="xl:table.-column">
+							<Badge class="text-xs" variant="outline">{task.estado}</Badge>
+						</Table.Cell>
+						<Table.Cell class="md:table.-cell xl:table.-column"
+							><Button class="size-9 p-2">
+								<Pen class="size-3" />
+							</Button></Table.Cell
+						>
+					</Table.Row>
+				{/each}
 			</Table.Body>
 		</Table.Root>
 	</Card.Content>

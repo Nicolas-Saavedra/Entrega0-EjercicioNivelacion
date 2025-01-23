@@ -48,8 +48,10 @@
 					<div class="flex items-center">
 						<BookCheck class="ml-1 mr-2 size-5 text-slate-500" />
 						<Card.Description>
-							{#if tasks.length > 0}
+							{#if tasks.length > 1}
 								Tienes un total de {tasks.length} tareas por terminar
+							{:else if tasks.length == 1}
+								Tienes 1 tarea por terminar
 							{:else}
 								No tienes tareas aun en el sistema
 							{/if}
