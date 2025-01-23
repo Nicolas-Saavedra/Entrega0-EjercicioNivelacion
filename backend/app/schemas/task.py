@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
+from .category import CategorySchema
 
 class TaskCreate(BaseModel):
     texto_tarea: str
@@ -21,6 +22,7 @@ class TaskSchema(BaseModel):
     estado: str
     id_Usuario: int
     id_Categoria: int
+    categoria: CategorySchema
 
     class Config:
         orm_mode = True  # To work seamlessly with SQLAlchemy models

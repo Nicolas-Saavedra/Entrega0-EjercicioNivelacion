@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import DateTime, Integer, String, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 class Task(Base):
@@ -13,3 +13,4 @@ class Task(Base):
     estado: Mapped[str] = mapped_column(String, index=True)
     id_Usuario: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     id_Categoria: Mapped[int] = mapped_column(Integer, ForeignKey("categories.id"))
+    categoria: Mapped[int] = relationship("Category", backref="tasks")
