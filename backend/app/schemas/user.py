@@ -1,5 +1,7 @@
 from datetime import datetime
+from typing import List
 from pydantic import BaseModel
+from .task import TaskSchema
 
 class UserCreate(BaseModel):
     nombre_usuario: str
@@ -7,6 +9,9 @@ class UserCreate(BaseModel):
 
 class UserLogin(UserCreate):
     pass
+
+class UserTasksResponse(BaseModel):
+    tasks: List[TaskSchema]
 
 class TokenSchema(BaseModel):
     access_token: str
