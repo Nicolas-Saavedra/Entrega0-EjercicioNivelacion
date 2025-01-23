@@ -5,4 +5,13 @@ type AuthTokenStore = {
         refresh_token: string
 }
 
-export const currentAuthTokens: Writable<AuthTokenStore | null> = writable(null);
+const AUTH_TOKEN_STORE_KEY = "authTokenStore"
+
+export const currentAuthTokens: Writable<AuthTokenStore | null> = writable(
+        JSON.parse(localStorage.getItem(AUTH_TOKEN_STORE_KEY) || "null")
+);
+
+currentAuthTokens.subscribe(authTokens => {
+        localStorage.setItem(AUTH_TOKEN_STORE_KEY, JSON.stringify(authTokens))
+})
+
