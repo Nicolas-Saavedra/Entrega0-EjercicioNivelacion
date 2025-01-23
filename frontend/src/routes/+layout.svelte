@@ -9,13 +9,17 @@
 
 	const maybeUser = get(currentUser);
 	const publicRoutes = ['/login', '/signup'];
-	const isLoggedIn = maybeUser || publicRoutes.includes(page.url.pathname);
+	const isLoggedInPrivateRoute = maybeUser || publicRoutes.includes(page.url.pathname);
+	const isLoggedInPublicRoute = maybeUser && publicRoutes.includes(page.url.pathname);
 
-	if (!isLoggedIn) {
+	if (!isLoggedInPrivateRoute) {
 		goto('/login');
+	}
+	if (isLoggedInPublicRoute) {
+		goto('/');
 	}
 </script>
 
-{#if isLoggedIn}
+{#if isLoggedInPrivateRoute || !isLoggedInPublicRoute}
 	{@render children()}
 {/if}
