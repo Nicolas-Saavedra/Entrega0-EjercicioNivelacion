@@ -19,6 +19,10 @@
             ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 	}
 
+	function toUppercaseFirst(text: string) {
+		return text.charAt(0).toUpperCase() + text.slice(1);
+	}
+
 	const { tasks, onCreateTask, onViewCategories, onEditTask }: TaskViewProps = $props();
 </script>
 
@@ -60,7 +64,9 @@
 							</div>
 						</Table.Cell>
 						<Table.Cell class="xl:table.-column">
-							<Badge class="text-xs" variant="outline">{task.id_Categoria}</Badge>
+							<Badge class="text-xs" variant="outline"
+								>{toUppercaseFirst(task.categoria.nombre)}</Badge
+							>
 						</Table.Cell>
 						<Table.Cell class="md:table.-cell xl:table.-column"
 							>{toFormattedDate(task.fecha_creacion)}</Table.Cell
@@ -69,7 +75,10 @@
 							{toFormattedDate(task.fecha_tentativa_finalizacion)}
 						</Table.Cell>
 						<Table.Cell class="xl:table.-column">
-							<Badge class="text-xs" variant="outline">{task.estado}</Badge>
+							<Badge class="text-xs" variant="outline">
+								{toUppercaseFirst(task.estado)}
+								<!-- Quick and dirty capitalization for first letter -->
+							</Badge>
 						</Table.Cell>
 						<Table.Cell class="md:table.-cell xl:table.-column"
 							><Button class="size-9 p-2">
