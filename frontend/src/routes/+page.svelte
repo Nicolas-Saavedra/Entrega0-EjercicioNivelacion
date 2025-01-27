@@ -6,10 +6,13 @@
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { type Task } from '../types/task';
 	import { BookCheck, LogOut } from 'lucide-svelte';
-	import TaskView from '$lib/components/app/taskview.svelte';
+	import TaskView from '$lib/components/app/taskView.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { currentAuthTokens } from '../stores/auth';
 	import { goto } from '$app/navigation';
+	import CreateTask from '$lib/components/app/createTask.svelte';
+
+	type AppViewName = 'taskView' | 'createTask' | 'editTask' | 'viewCategories';
 
 	let tasksPromise = $state(
 		api
@@ -17,9 +20,20 @@
 			.then((response) => response.data)
 	);
 
-	function onCreateTask() {}
-	function onViewCategories() {}
-	function onEditTask(task: Task) {}
+	let currentView = $state<AppViewName>('taskView');
+
+	function onCreateTask() {
+		currentView = 'createTask';
+	}
+	function onViewCategories() {
+		currentView = 'viewCategories';
+	}
+	function onEditTask(task: Task) {
+		currentView = 'editTask';
+	}
+	function onTaskView() {
+		currentView = 'taskView';
+	}
 	function closeSession() {
 		currentUser.set(null);
 		currentAuthTokens.set(null);
@@ -59,7 +73,11 @@
 					</div>
 				</Card.Content>
 			</Card.Root>
-			<TaskView {tasks} {onCreateTask} {onViewCategories} {onEditTask} />
+			{#if currentView == 'taskView'}
+				<TaskView {tasks} {onCreateTask} {onViewCategories} {onEditTask} />
+			{:else if currentView == 'createTask'}
+				<CreateTask {tasks} />
+			{/if}
 		</div>
 	</div>
 {/await}
