@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel
 from .category import CategorySchema
 
@@ -11,8 +12,8 @@ class TaskCreate(BaseModel):
     id_Categoria: int
 
 class TaskUpdate(BaseModel):
-    texto_tarea: str | None
-    estado: str | None
+    texto_tarea: Optional[str] = None
+    estado: Optional[str] = None 
 
 class TaskSchema(BaseModel):
     id: int

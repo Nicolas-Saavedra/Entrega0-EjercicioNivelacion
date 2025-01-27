@@ -28,13 +28,13 @@
 
 	async function createTask() {
 		if (taskContent && date && hour && category) {
-			const jsDate = date.toDate('UTC');
+			const jsDate = date.toDate('UTC-5');
 			jsDate.setHours(hour);
 			const taskToCreate: Omit<Task, 'categoria' | 'id'> = {
 				texto_tarea: taskContent!,
 				fecha_creacion: new Date().toISOString(),
 				fecha_tentativa_finalizacion: jsDate.toISOString(),
-				estado: 'active',
+				estado: 'activa',
 				id_Usuario: $currentUser!.id,
 				id_Categoria: category.id
 			};
