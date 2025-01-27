@@ -31,7 +31,7 @@
 			nombre_usuario: infoResponse.data.nombre_usuario,
 			imagen_perfil: infoResponse.data.imagen_perfil
 		});
-		goto('/', { replaceState: true });
+		goto('/tasks', { replaceState: true });
 	}
 </script>
 

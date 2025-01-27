@@ -34,7 +34,7 @@
 			nombre_usuario: signupResponse.data.nombre_usuario,
 			imagen_perfil: signupResponse.data.imagen_perfil
 		});
-		goto('/', { replaceState: true });
+		goto('/tasks', { replaceState: true });
 	}
 </script>
 
