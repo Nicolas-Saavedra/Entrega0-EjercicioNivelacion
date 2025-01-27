@@ -52,7 +52,7 @@
 					{#each $userTasks as task}
 						<Table.Row>
 							<Table.Cell>
-								<div class="max-w-64 font-medium">
+								<div class="max-w-48 font-medium">
 									{task.texto_tarea}
 								</div>
 							</Table.Cell>

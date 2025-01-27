@@ -38,6 +38,19 @@
 			goto('/tasks');
 		}
 	}
+
+	async function deleteTask() {
+		await api.delete(`${PUBLIC_API_URL}/tareas/${id}`, {
+			validateStatus: (status) => status >= 200 && status <= 300
+		});
+		userTasks.update((currentTasks) => {
+			if (currentTasks) {
+				return currentTasks.filter((task) => task.id !== Number(id));
+			}
+			return null;
+		});
+		goto('/tasks');
+	}
 </script>
 
 <Card.Root>
@@ -61,6 +74,9 @@
 				<Select.Item value="finalizada">"Finalizada"</Select.Item>
 			</Select.Content>
 		</Select.Root>
-		<Button class="mt-2 w-48" onclick={updateTask}>Modificar tarea</Button>
+		<div class="flew-row mt-4 flex gap-3">
+			<Button class="mt-2 w-48" onclick={updateTask}>Modificar tarea</Button>
+			<Button class="mt-2 w-48 bg-red-400" onclick={deleteTask}>Eliminar tarea</Button>
+		</div>
 	</Card.Content>
 </Card.Root>
