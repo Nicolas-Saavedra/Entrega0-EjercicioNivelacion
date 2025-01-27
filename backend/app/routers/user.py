@@ -1,14 +1,19 @@
+from datetime import datetime
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from jose import exceptions, jwt
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
-from app.schemas.user import TokenSchema, UserCreate, UserSchema, UserTasksResponse
+from app.schemas.user import AccessTokenSchema, RefreshTokenSchema, TokenPayload, TokenSchema, UserCreate, UserSchema, UserTasksResponse
 from app.services.user_service import create_user
 from app.database import get_db
 from app.models.user import User
 from app.models.task import Task
 from app.schemas.task import TaskSchema
 from app.utils import (
+    ALGORITHM,
+    JWT_REFRESH_SECRET_KEY,
     create_access_token,
     create_refresh_token,
     verify_password
@@ -48,6 +53,30 @@ def login_endpoint(form_data: OAuth2PasswordRequestForm = Depends(), db: Session
     return {
         "access_token": create_access_token(user.id),
         "refresh_token": create_refresh_token(user.id),
+    }
+
+@router.post("/refrescar-token", response_model=AccessTokenSchema, status_code=status.HTTP_201_CREATED)
+def refresh_endpoint(refresh_token: RefreshTokenSchema = Depends()):
+    try:
+        payload = jwt.decode(
+            refresh_token.refresh_token, JWT_REFRESH_SECRET_KEY, algorithms=[ALGORITHM]
+        )
+        token_data = TokenPayload(**payload)
+
+        if datetime.timestamp(token_data.exp) < datetime.timestamp(datetime.now()):
+            raise HTTPException(
+                status_code = status.HTTP_401_UNAUTHORIZED,
+                detail="Token expired",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except(exceptions.JWTError, ValidationError):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return {
+        "access_token": create_access_token(token_data.sub),
     }
 
 @router.get("/{id}/tareas", response_model=List[TaskSchema], status_code=status.HTTP_200_OK)
