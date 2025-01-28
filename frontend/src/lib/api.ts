@@ -3,9 +3,11 @@ import { currentAuthTokens } from '../stores/auth';
 import { PUBLIC_API_URL } from '$env/static/public';
 
 let accessToken: string | undefined;
+let refreshToken: string | undefined;
 
 currentAuthTokens.subscribe(tokens => {
   accessToken = tokens?.access_token;
+  refreshToken = tokens?.refresh_token;
 });
 
 const api = axios.create({

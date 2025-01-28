@@ -56,7 +56,7 @@ def login_endpoint(form_data: OAuth2PasswordRequestForm = Depends(), db: Session
     }
 
 @router.post("/refrescar-token", response_model=AccessTokenSchema, status_code=status.HTTP_201_CREATED)
-def refresh_endpoint(refresh_token: RefreshTokenSchema = Depends()):
+def refresh_endpoint(refresh_token: RefreshTokenSchema):
     try:
         payload = jwt.decode(
             refresh_token.refresh_token, JWT_REFRESH_SECRET_KEY, algorithms=[ALGORITHM]

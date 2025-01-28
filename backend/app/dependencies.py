@@ -17,7 +17,6 @@ reuseable_oauth = OAuth2PasswordBearer(
     scheme_name="JWT"
 )
 
-
 async def get_current_user(token: str = Depends(reuseable_oauth), db: Session = Depends(get_db)) -> UserSchema:
     try:
         payload = jwt.decode(
@@ -25,6 +24,7 @@ async def get_current_user(token: str = Depends(reuseable_oauth), db: Session = 
         )
         token_data = TokenPayload(**payload)
 
+        # TODO: Errors here are never caught properly, decoding already catches expirations
         if datetime.timestamp(token_data.exp) < datetime.timestamp(datetime.now()):
             raise HTTPException(
                 status_code = status.HTTP_401_UNAUTHORIZED,
