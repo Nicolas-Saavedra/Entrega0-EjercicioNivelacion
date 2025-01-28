@@ -2,7 +2,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import { BookmarkPlus, Trash } from 'lucide-svelte';
+	import { BookmarkPlus, Trash, Undo2 } from 'lucide-svelte';
 	import { taskCategories } from '../../../stores/taskCategories';
 	import { goto } from '$app/navigation';
 	import api from '$lib/api';
@@ -32,6 +32,10 @@
 			<Button onclick={() => goto('/tasks/categories/create')} size="sm" class="ml-auto gap-1">
 				Crear nueva categoria
 				<BookmarkPlus class="h-4 w-4" />
+			</Button>
+			<Button onclick={() => goto('/tasks')} size="sm" class="ml-auto gap-1">
+				Volver
+				<Undo2 class="h-4 w-4" />
 			</Button>
 		</div>
 	</Card.Header>

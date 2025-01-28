@@ -9,6 +9,7 @@
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import type { Category } from '../../../../types/category';
 	import { taskCategories } from '../../../../stores/taskCategories';
+	import { Undo2 } from 'lucide-svelte';
 
 	let categoryName: string | null = $state(null);
 	let categoryDescription: string | null = $state(null);
@@ -34,9 +35,17 @@
 </script>
 
 <Card.Root>
-	<Card.Header>
-		<Card.Title>Crear nueva categoria</Card.Title>
-		<Card.Description>Clasifica tus tareas por medio de tags a continuacion</Card.Description>
+	<Card.Header class="flex flex-row items-center">
+		<div class="grid gap-2">
+			<Card.Title>Crear nueva categoria</Card.Title>
+			<Card.Description>Clasifica tus tareas por medio de tags a continuacion</Card.Description>
+		</div>
+		<div class="ml-auto gap-1">
+			<Button onclick={() => goto('/tasks/categories')} size="sm" class="ml-auto gap-1">
+				Volver
+				<Undo2 class="h-4 w-4" />
+			</Button>
+		</div>
 	</Card.Header>
 	<Card.Content>
 		<div class="grid gap-6">

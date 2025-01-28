@@ -8,6 +8,7 @@
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { userTasks } from '../../../../stores/userTasks';
 	import { goto } from '$app/navigation';
+	import { Undo2 } from 'lucide-svelte';
 
 	const { id } = page.params;
 
@@ -54,9 +55,17 @@
 </script>
 
 <Card.Root>
-	<Card.Header>
-		<Card.Title>Modificar tarea existente</Card.Title>
-		<Card.Description>Puedes cambiar el estado de la tarea a continuacion</Card.Description>
+	<Card.Header class="flex flex-row items-center">
+		<div class="grid gap-2">
+			<Card.Title>Modificar tarea existente</Card.Title>
+			<Card.Description>Puedes cambiar el estado de la tarea a continuacion</Card.Description>
+		</div>
+		<div class="ml-auto gap-1">
+			<Button onclick={() => goto('/tasks')} size="sm" class="ml-auto gap-1">
+				Volver
+				<Undo2 class="h-4 w-4" />
+			</Button>
+		</div>
 	</Card.Header>
 	<Card.Content>
 		<Label for="name">Estado</Label>

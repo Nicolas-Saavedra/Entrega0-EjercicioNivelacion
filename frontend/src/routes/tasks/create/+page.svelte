@@ -15,6 +15,7 @@
 	import { userTasks } from '../../../stores/userTasks';
 	import { goto } from '$app/navigation';
 	import { taskCategories } from '../../../stores/taskCategories';
+	import { Undo2 } from 'lucide-svelte';
 
 	let taskContent: string | null = $state(null);
 	let date: DateValue | null = $state(null);
@@ -28,13 +29,14 @@
 
 	async function createTask() {
 		if (taskContent && date && hour && category) {
-			const jsDate = date.toDate('UTC-5');
-			jsDate.setHours(hour);
+			const jsDate = date.toDate('UTC');
+			const currentAdjustedDate = new Date(new Date().getTime() - 5 * 60 * 60 * 1000);
+			jsDate.setUTCHours(hour);
 			const taskToCreate: Omit<Task, 'categoria' | 'id'> = {
 				texto_tarea: taskContent!,
-				fecha_creacion: new Date().toISOString(),
+				fecha_creacion: currentAdjustedDate.toISOString(),
 				fecha_tentativa_finalizacion: jsDate.toISOString(),
-				estado: 'activa',
+				estado: 'sin empezar',
 				id_Usuario: $currentUser!.id,
 				id_Categoria: category.id
 			};
@@ -48,9 +50,17 @@
 </script>
 
 <Card.Root>
-	<Card.Header>
-		<Card.Title>Crear nueva tarea</Card.Title>
-		<Card.Description>Puedes cambiar estos valores en el menu principal despues</Card.Description>
+	<Card.Header class="flex flex-row items-center">
+		<div class="grid gap-2">
+			<Card.Title>Crear nueva tarea</Card.Title>
+			<Card.Description>Puedes cambiar estos valores en el menu principal despues</Card.Description>
+		</div>
+		<div class="ml-auto gap-1">
+			<Button onclick={() => goto('/tasks')} size="sm" class="ml-auto gap-1">
+				Volver
+				<Undo2 class="h-4 w-4" />
+			</Button>
+		</div>
 	</Card.Header>
 	<Card.Content>
 		<div class="grid gap-6">
