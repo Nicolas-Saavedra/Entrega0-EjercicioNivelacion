@@ -18,12 +18,10 @@ class TokenSchema(BaseModel):
     refresh_token: str
 
 class RefreshTokenSchema(BaseModel):
-    access_token: str
     refresh_token: str
 
 class AccessTokenSchema(BaseModel):
     access_token: str
-    refresh_token: str
 
 class TokenPayload(BaseModel):
     exp: datetime
