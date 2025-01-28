@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.user import UserCreate 
+from app.schemas.user import UserCreate
 from app.utils import get_hashed_password 
 from hashlib import md5 
 
@@ -16,3 +16,9 @@ def create_user(db: Session, user: UserCreate) -> User:
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def update_user_profile_picture(db: Session, user: User, imagen_perfil: str) -> User:
+    user.imagen_perfil = imagen_perfil
+    db.commit()
+    db.refresh(user)
+    return user
