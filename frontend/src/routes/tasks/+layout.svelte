@@ -5,15 +5,17 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { type Task } from '../../types/task';
-	import { BookCheck, LogOut } from 'lucide-svelte';
+	import { BookCheck, ImageUp, LogOut } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { currentAuthTokens } from '../../stores/auth';
 	import { goto } from '$app/navigation';
 	import { userTasks } from '../../stores/userTasks';
 	import { taskCategories } from '../../stores/taskCategories';
 	import type { Category } from '../../types/category';
+	import type { User } from '../../types/user';
 
 	let { children } = $props();
+	let selectedFile: File | null = null;
 
 	async function fillUserTasks() {
 		const userTasksResponse = await api.get<Task[]>(
@@ -32,18 +34,54 @@
 		taskCategories.set(categoriesResponse.data);
 	}
 
+	async function changeProfilePicture() {
+		const imageFileFormData = new FormData();
+		imageFileFormData.append('file', selectedFile!);
+
+		const profileUpdateResponse = await api.put<User>(
+			`${PUBLIC_API_URL}/usuarios/actualizar-perfil`,
+			imageFileFormData,
+			{
+				validateStatus: (status) => status >= 200 && status <= 300,
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			}
+		);
+		currentUser.set(profileUpdateResponse.data);
+	}
+
 	function closeSession() {
 		currentUser.set(null);
 		currentAuthTokens.set(null);
 		goto('/login');
 	}
 
+	function triggerFileInput() {
+		const fileInput = document.getElementById('fileInput')!;
+		fileInput.click(); // Programmatically click the hidden file input
+	}
+
+	function handleFileChange(event: Event) {
+		selectedFile = (event.target as HTMLInputElement).files![0];
+		if (selectedFile) {
+			changeProfilePicture(); // Automatically upload the file after selection
+		}
+	}
+
 	fillUserTasks();
 	fillCategories();
 </script>
 
-<!-- TODO: Navigation feels bad because we are not using paths and history -->
-{#if $userTasks}
+<input
+	id="fileInput"
+	type="file"
+	onchange={handleFileChange}
+	accept="image/*"
+	style="display: none;"
+/>
+
+{#if $userTasks && $currentUser}
 	<div class="grid grid-cols-12">
 		<div class="col-span-6 col-start-4 mt-48 flex flex-col justify-center">
 			<Card.Root class="mb-2">
@@ -55,6 +93,9 @@
 							</Avatar.Root>
 							Hola de nuevo, {$currentUser!.nombre_usuario}!
 							<div class="ml-auto gap-1">
+								<Button onclick={triggerFileInput}
+									>Cambiar imagen perfil<ImageUp class="ml-2 size-4" /></Button
+								>
 								<Button onclick={closeSession}>Cerrar sesión <LogOut class="ml-2 size-4" /></Button>
 							</div>
 						</div>
