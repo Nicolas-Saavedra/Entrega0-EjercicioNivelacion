@@ -5,7 +5,7 @@ from app.database import Base, engine
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(root_path="/api/v1")
 
 app.include_router(user_router.router, prefix="/usuarios", tags=["users"])
 app.include_router(task_router.router, prefix="/tareas", tags=["tasks"])
