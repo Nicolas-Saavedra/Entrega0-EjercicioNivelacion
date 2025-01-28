@@ -7,6 +7,7 @@
 	import { goto } from '$app/navigation';
 	import api from '$lib/api';
 	import { PUBLIC_API_URL } from '$env/static/public';
+	import { userTasks } from '../../../stores/userTasks';
 
 	async function deleteCategory(id: number) {
 		await api.delete(`${PUBLIC_API_URL}/categorias/${id}`, {
@@ -18,7 +19,9 @@
 			}
 			return null;
 		});
-		goto('/tasks/categories');
+		userTasks.update((tasks) =>
+			tasks ? tasks.filter((task) => task.id_Categoria !== Number(id)) : null
+		);
 	}
 </script>
 

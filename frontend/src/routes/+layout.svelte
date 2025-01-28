@@ -10,6 +10,10 @@
 	const isLoggedInPrivateRoute = $currentUser || publicRoutes.includes(page.url.pathname);
 	const isLoggedInPublicRoute = $currentUser && publicRoutes.includes(page.url.pathname);
 
+	if (page.url.pathname === '/') {
+		goto($currentUser ? '/tasks' : '/login');
+	}
+
 	if (!isLoggedInPrivateRoute) {
 		goto('/login');
 	}
