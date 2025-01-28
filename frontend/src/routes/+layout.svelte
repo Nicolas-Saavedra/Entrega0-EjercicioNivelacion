@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import '../app.css';
 	import { currentUser } from '../stores/currentUser';
+	import { Toaster } from '$lib/components/ui/sonner';
 
 	let { children } = $props();
 
@@ -22,6 +23,7 @@
 	}
 </script>
 
+<Toaster />
 {#if isLoggedInPrivateRoute || !isLoggedInPublicRoute}
 	{@render children()}
 {/if}

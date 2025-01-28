@@ -5,6 +5,14 @@
 	import { currentUser } from '../../stores/currentUser';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import type { AxiosResponse } from 'axios';
+	import type { User } from '../../types/user';
+
+	type JWTLogin = {
+		access_token: string;
+		refresh_token: string;
+	};
 
 	async function onsubmit(name: string, password: string) {
 		const formData = {
@@ -15,16 +23,32 @@
 			nombre_usuario: name,
 			contrasenia: password
 		};
-		const signupResponse = await api.post(`${PUBLIC_API_URL}/usuarios/`, signupData, {
-			validateStatus: (status) => status >= 200 && status <= 300
-		});
-		const loginResponse = await api.postForm(
-			`${PUBLIC_API_URL}/usuarios/iniciar-sesion`,
-			formData,
-			{
+		let signupResponse: AxiosResponse<User>;
+		try {
+			signupResponse = await api.post(`${PUBLIC_API_URL}/usuarios/`, signupData, {
 				validateStatus: (status) => status >= 200 && status <= 300
-			}
-		);
+			});
+		} catch (e) {
+			toast.error(
+				'There is a problem establishing a connection to the database, please try again later'
+			);
+			return;
+		}
+		let loginResponse: AxiosResponse<JWTLogin>;
+		try {
+			loginResponse = await api.postForm<JWTLogin>(
+				`${PUBLIC_API_URL}/usuarios/iniciar-sesion`,
+				formData,
+				{
+					validateStatus: (status) => status >= 200 && status <= 300
+				}
+			);
+		} catch (e) {
+			toast.error(
+				"There was an error trying to access the logged in user's data, please try again later"
+			);
+			return;
+		}
 		currentAuthTokens.set({
 			access_token: loginResponse.data.access_token,
 			refresh_token: loginResponse.data.refresh_token
