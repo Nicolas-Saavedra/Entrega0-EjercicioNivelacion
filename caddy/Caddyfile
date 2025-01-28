@@ -1,10 +1,13 @@
 :80 {
-    # Serve static SvelteKit build
-    root * /srv
-    file_server
+    encode gzip
 
-    # Proxy requests starting with /api/v1/ to FastAPI
-    route /api/v1/* {
-        reverse_proxy fastapi.local:8000
+    handle /api/v1/* {
+    	reverse_proxy backend.local:8000
+    }
+
+    handle {
+	root * /srv
+	try_files {path} /index.html
+	file_server
     }
 }
