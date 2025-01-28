@@ -6,16 +6,16 @@
 	import { page } from '$app/state';
 	import api from '$lib/api';
 	import { PUBLIC_API_URL } from '$env/static/public';
-	import { userTasks } from '../../../../stores/userTasks';
+	import { userTasks } from '../../../stores/userTasks';
 	import { goto } from '$app/navigation';
 	import { Undo2 } from 'lucide-svelte';
 
-	const { id } = page.params;
+	const id = page.url.searchParams.get('id');
 
 	let taskState: string | null = $state(null);
 
 	async function updateTask() {
-		if (taskState) {
+		if (taskState && id) {
 			const taskUpdateResponse = await api.put(
 				`${PUBLIC_API_URL}/tareas/${id}`,
 				{

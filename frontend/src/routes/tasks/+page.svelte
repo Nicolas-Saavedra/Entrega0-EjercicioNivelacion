@@ -74,7 +74,7 @@
 								</Badge>
 							</Table.Cell>
 							<Table.Cell class="md:table.-cell xl:table.-column"
-								><Button class="size-9 p-2" onclick={() => goto(`/tasks/modify/${task.id}`)}>
+								><Button class="size-9 p-2" onclick={() => goto(`/tasks/modify?id=${task.id}`)}>
 									<Pen class="size-3" />
 								</Button></Table.Cell
 							>
