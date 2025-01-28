@@ -7,10 +7,10 @@ class Task(Base):
     __tablename__ = "tasks"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    texto_tarea: Mapped[str] = mapped_column(String, index=True)
+    texto_tarea: Mapped[str] = mapped_column(String, index=False)
     fecha_creacion: Mapped[datetime] = mapped_column(DateTime, index=True)
     fecha_tentativa_finalizacion: Mapped[datetime] = mapped_column(DateTime, index=True)
-    estado: Mapped[str] = mapped_column(String, index=True)
+    estado: Mapped[str] = mapped_column(String, index=False)
     id_Usuario: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"))
     id_Categoria: Mapped[int] = mapped_column(Integer, ForeignKey("categories.id"))
     categoria: Mapped[int] = relationship("Category", backref="tasks")

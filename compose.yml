@@ -16,6 +16,8 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     hostname: caddy.local
+    depends_on:
+      - fastapi
 
   fastapi:
     container_name: backend
@@ -28,6 +30,8 @@ services:
     env_file:
       - ./backend/.env.production
     hostname: backend.local
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:15

@@ -7,4 +7,4 @@ class Category(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     nombre: Mapped[str] = mapped_column(String, index=True)
-    descripcion: Mapped[str] = mapped_column(String, index=True)
+    descripcion: Mapped[str] = mapped_column(String, index=False)
