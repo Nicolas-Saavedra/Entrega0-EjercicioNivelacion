@@ -2,17 +2,16 @@ version: '3.9'
 
 services:
   caddy:
-    image: caddy:latest
+    build:
+      context: ./frontend 
+      dockerfile: Dockerfile
     container_name: caddy
     restart: always
     networks:
       - app_network
     ports:
       - "80:80"
-      - "443:443"
     volumes:
-      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-      - ./frontend/build:/srv  # Path to the static build of your SvelteKit site
       - caddy_data:/data
       - caddy_config:/config
     hostname: caddy.local
@@ -25,7 +24,7 @@ services:
     networks:
       - app_network
     build:
-      context: ./backend  # Path to your FastAPI app
+      context: ./backend
       dockerfile: Dockerfile
     env_file:
       - ./backend/.env.production
